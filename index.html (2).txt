@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>H2 Economics Essay Coach — Demand & Supply</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --good: #15803d;
+      --warn: #b45309;
+      --bad: #b91c1c;
+      --blue: #2563eb;
+      --purple: #7c3aed;
+      --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: radial-gradient(circle at top left, #dbeafe 0, transparent 30%),
+                  radial-gradient(circle at top right, #ede9fe 0, transparent 32%),
+                  var(--bg);
+      line-height: 1.5;
+    }
+
+    header {
+      padding: 28px 24px 18px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow);
+      border-radius: 26px;
+      padding: 24px;
+      display: grid;
+      gap: 14px;
+    }
+
+    h1, h2, h3 { margin: 0; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); letter-spacing: -0.04em; }
+    h2 { font-size: 1.15rem; }
+    h3 { font-size: 1rem; }
+    p { margin: 0; }
+
+    .tagrow { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      font-size: 0.78rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #3730a3;
+      font-weight: 700;
+    }
+
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px 36px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+    }
+
+    @media (max-width: 980px) {
+      main { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .cardHeader {
+      padding: 18px 18px 12px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .cardBody { padding: 18px; }
+
+    .questionBox {
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .questionBox strong { color: #0f172a; }
+
+    textarea {
+      width: 100%;
+      min-height: 520px;
+      resize: vertical;
+      border: 1px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 16px;
+      font-size: 1rem;
+      line-height: 1.6;
+      outline: none;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0 0;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      font-weight: 800;
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+
+    button.primary { background: var(--blue); color: white; }
+    button.danger { background: #fee2e2; color: #991b1b; }
+    button:hover { filter: brightness(0.97); }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: #f8fafc;
+    }
+
+    .stat .num { font-size: 1.5rem; font-weight: 900; }
+    .stat .label { color: var(--muted); font-size: 0.82rem; }
+
+    .meterWrap {
+      height: 12px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 8px 0 12px;
+    }
+
+    .meter {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      transition: width 0.25s ease;
+    }
+
+    .feedbackGroup { display: grid; gap: 10px; }
+
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      background: #fff;
+    }
+
+    .icon {
+      width: 24px; height: 24px;
+      display: grid; place-items: center;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 0.85rem;
+    }
+
+    .ok .icon { background: #dcfce7; color: var(--good); }
+    .maybe .icon { background: #fef3c7; color: var(--warn); }
+    .missing .icon { background: #fee2e2; color: var(--bad); }
+
+    .itemTitle { font-weight: 900; }
+    .itemText { color: var(--muted); font-size: 0.92rem; margin-top: 2px; }
+
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 18px 0; }
+    .tabBtn { background: #f1f5f9; color: #334155; }
+    .tabBtn.active { background: #111827; color: #fff; }
+    .tabPanel { display: none; }
+    .tabPanel.active { display: block; }
+
+    .rubric {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 0.92rem;
+    }
+
+    .rubric th, .rubric td {
+      border: 1px solid var(--line);
+      padding: 10px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .rubric th { background: #f8fafc; }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: #fff;
+      margin-bottom: 10px;
+    }
+
+    summary { cursor: pointer; font-weight: 900; }
+
+    .modelAnswer {
+      white-space: pre-wrap;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 0.94rem;
+    }
+
+    .highlight {
+      background: #fef9c3;
+      padding: 1px 4px;
+      border-radius: 5px;
+      font-weight: 700;
+    }
+
+    .small { font-size: 0.85rem; color: var(--muted); }
+
+    .footerNote {
+      max-width: 1280px;
+      margin: 0 auto 30px;
+      padding: 0 24px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <section class="hero">
+      <div class="tagrow">
+        <span class="tag">H2 Economics</span>
+        <span class="tag">JC1</span>
+        <span class="tag">Demand & Supply</span>
+        <span class="tag">Essay Feedback</span>
+      </div>
+      <h1>Rice Prices Essay Live Coach</h1>
+      <p>Type your answer for the 2020 SAJC H2 FE question. The tool checks your structure, economic terms, demand/supply analysis, PED/PES explanation, diagram reference, and conclusion.</p>
+    </section>
+  </header>
+
+  <main>
+    <section class="card">
+      <div class="cardHeader">
+        <div>
+          <h2>Student essay editor</h2>
+          <p class="small">Feedback updates automatically as you type.</p>
+        </div>
+      </div>
+      <div class="cardBody">
+        <div class="questionBox">
+          <p><strong>Question:</strong> Global rice prices are expected to increase sharply by 2050 due to rising world consumption, greater use of rice feed for animal feeding, and falling crop yield levels caused by bad weather in major rice-producing countries.</p>
+          <p style="margin-top:8px;"><strong>(a)</strong> Explain why global rice prices are expected to increase sharply. <strong>[10]</strong></p>
+        </div>
+        <textarea id="essay" placeholder="Start typing your essay here..."></textarea>
+        <div class="toolbar">
+          <button class="primary" onclick="insertStarter()">Insert essay scaffold</button>
+          <button onclick="copyEssay()">Copy essay</button>
+          <button class="danger" onclick="clearEssay()">Clear</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="cardHeader">
+        <div>
+          <h2>Live feedback</h2>
+          <p class="small">This is a guide, not an official mark.</p>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tabBtn active" onclick="showTab('feedback')">Feedback</button>
+        <button class="tabBtn" onclick="showTab('mistakes')">Mistakes</button>
+        <button class="tabBtn" onclick="showTab('model')">Model answer</button>
+        <button class="tabBtn" onclick="showTab('rubric')">Rubric</button>
+      </div>
+
+      <div class="cardBody tabPanel active" id="feedback">
+        <div class="stats">
+          <div class="stat"><div class="num" id="score">0</div><div class="label">Readiness / 100</div></div>
+          <div class="stat"><div class="num" id="words">0</div><div class="label">Words</div></div>
+          <div class="stat"><div class="num" id="level">L1</div><div class="label">Likely band</div></div>
+        </div>
+        <div class="meterWrap"><div class="meter" id="meter"></div></div>
+        <div class="feedbackGroup" id="feedbackList"></div>
+      </div>
+
+      <div class="cardBody tabPanel" id="mistakes">
+        <details open>
+          <summary>Common mistake 1: Listing factors without market analysis</summary>
+          <p>Do not merely say “population rises so prices rise”. Explain that demand increases, demand curve shifts right, shortage occurs at the original price, and price rises to clear the shortage.</p>
+        </details>
+        <details>
+          <summary>Common mistake 2: Forgetting why the increase is sharp</summary>
+          <p>The word <span class="highlight">sharply</span> requires PED and PES analysis. Explain that rice has price-inelastic demand and supply, so a large price increase is needed to clear the shortage.</p>
+        </details>
+        <details>
+          <summary>Common mistake 3: Weak context</summary>
+          <p>Use rice context: staple food, necessity, Asian consumers, animal feed, bad weather, crop yields, agricultural gestation period, China and India if relevant.</p>
+        </details>
+        <details>
+          <summary>Common mistake 4: Invalid equilibrium link</summary>
+          <p>Do not claim price rises simply because “demand is higher”. The valid link is through shortage, upward pressure on price, and movement to a new equilibrium.</p>
+        </details>
+        <details>
+          <summary>Common mistake 5: Missing combined impact</summary>
+          <p>A strong answer combines both a rightward shift of demand and a leftward shift of supply, leading to a larger shortage and sharper rise in equilibrium price.</p>
+        </details>
+      </div>
+
+      <div class="cardBody tabPanel" id="model">
+        <div class="modelAnswer">Introduction
+When a market is in equilibrium, there is no tendency for price and quantity to change unless external forces act on the market. In the global rice market, changes in both demand and supply, together with the price-inelastic nature of demand and supply for rice, explain why global rice prices are expected to increase sharply.
+
+Demand factors
+Global rice demand has risen due to an increase in world consumption, possibly caused by population growth and rising income. Since rice is a normal good, higher household income may cause consumers to demand more rice. This is especially relevant in large emerging economies where population size and purchasing power have been rising.
+
+There is also greater use of rice for animal feeding. Rice is used as a factor input in animal rearing. As demand for meat rises, farmers require more rice to feed animals, increasing the derived demand for rice. Hence, global demand for rice rises, shifting the demand curve rightward from D1 to D2.
+
+Supply factors
+At the same time, global rice supply has fallen due to lower crop yields in major rice-producing countries. Bad weather conditions may reduce harvests and lower land productivity. This decreases the quantity of rice supplied at each price, shifting the supply curve leftward from S1 to S2.
+
+PED analysis
+Demand for rice is price inelastic because rice is a necessity and a staple food for many consumers, especially in Asia. When price rises, quantity demanded falls less than proportionately, ceteris paribus. Hence, a large increase in price is needed to reduce quantity demanded enough to clear the shortage.
+
+PES analysis
+Supply of rice is also price inelastic in the short run because agricultural production has a long gestation period. Rice producers cannot immediately increase output in response to higher prices. Hence, quantity supplied rises less than proportionately when price increases, ceteris paribus. A large increase in price is therefore needed for the market to reach a new equilibrium.
+
+Combined impact
+With reference to the demand and supply diagram, the increase in demand from D1 to D2 and the decrease in supply from S1 to S2 create a large shortage at the original equilibrium price P1. This causes strong upward pressure on price, leading to a sharp rise in global rice prices from P1 to P2. If the increase in demand is larger than the fall in supply, equilibrium quantity may rise slightly from Q1 to Q2.
+
+Conclusion
+Therefore, global rice prices are expected to rise sharply due to the combined effect of rising demand, falling supply, and the price-inelastic nature of both demand and supply for rice.</div>
+      </div>
+
+      <div class="cardBody tabPanel" id="rubric">
+        <table class="rubric">
+          <thead>
+            <tr><th>Level</th><th>Descriptor</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>L3</strong></td><td>Well-developed explanations of both demand and supply factors. Clear use of context. Shows awareness of how PED &lt; 1 and PES &lt; 1 affect the extent of price change.</td></tr>
+            <tr><td><strong>L2</strong></td><td>Demand and supply factors are present but may not be well-contextualised. Limited awareness of how PED &lt; 1 and PES &lt; 1 cause sharp price changes.</td></tr>
+            <tr><td><strong>L1</strong></td><td>Mostly descriptive narration of demand and supply factors. Weak or invalid links to equilibrium price.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <p class="footerNote">Teacher note: This offline tool uses keyword and structure checks only. It does not send student writing to any server.</p>
+
+  <script>
+    const essay = document.getElementById('essay');
+    const feedbackList = document.getElementById('feedbackList');
+    const scoreEl = document.getElementById('score');
+    const wordsEl = document.getElementById('words');
+    const levelEl = document.getElementById('level');
+    const meterEl = document.getElementById('meter');
+
+    const checks = [
+      {
+        title: 'Clear introduction',
+        points: 8,
+        ok: t => hasAny(t, ['equilibrium', 'external forces', 'market equilibrium']) && hasAny(t, ['demand', 'supply']),
+        hint: 'Define the market situation and signal that demand, supply, PED and PES explain the sharp price rise.'
+      },
+      {
+        title: 'Demand factor: rising world consumption',
+        points: 12,
+        ok: t => hasAny(t, ['world consumption', 'population', 'income', 'normal good', 'china', 'india']) && hasAny(t, ['demand increases', 'increase in demand', 'demand curve shifts right', 'rightward shift']),
+        hint: 'Explain how population or income growth raises demand for rice, shifting demand right.'
+      },
+      {
+        title: 'Demand factor: animal feed / derived demand',
+        points: 10,
+        ok: t => hasAny(t, ['animal feed', 'animal feeding', 'rear animals', 'meat']) && hasAny(t, ['derived demand', 'factor of production', 'input']),
+        hint: 'Explain rice as an input for animal rearing, causing derived demand to rise.'
+      },
+      {
+        title: 'Supply factor: falling crop yields / bad weather',
+        points: 12,
+        ok: t => hasAny(t, ['crop yield', 'crop yields', 'bad weather', 'poor weather', 'harvest', 'land productivity']) && hasAny(t, ['supply decreases', 'fall in supply', 'decrease in supply', 'leftward shift', 'supply curve shifts left']),
+        hint: 'Explain how bad weather lowers yields and shifts supply left.'
+      },
+      {
+        title: 'Correct shortage and price mechanism',
+        points: 12,
+        ok: t => hasAny(t, ['shortage', 'excess demand']) && hasAny(t, ['upward pressure', 'price rises', 'increase in price', 'market clears', 'clear the shortage']),
+        hint: 'Link curve shifts to a shortage at the original price, upward pressure on price, and a new equilibrium.'
+      },
+      {
+        title: 'PED < 1 explains sharp price rise',
+        points: 14,
+        ok: t => hasAny(t, ['price inelastic demand', 'ped<1', 'ped < 1', 'inelastic demand']) && hasAny(t, ['necessity', 'staple', 'survival']) && hasAny(t, ['less than proportionate', 'less than proportionately']),
+        hint: 'Explain that rice is a necessity/staple, so quantity demanded falls less than proportionately when price rises.'
+      },
+      {
+        title: 'PES < 1 explains sharp price rise',
+        points: 14,
+        ok: t => hasAny(t, ['price inelastic supply', 'pes<1', 'pes < 1', 'inelastic supply']) && hasAny(t, ['gestation', 'agricultural', 'cannot immediately', 'time lag']) && hasAny(t, ['less than proportionate', 'less than proportionately']),
+        hint: 'Explain that rice supply cannot increase quickly because of agricultural gestation periods.'
+      },
+      {
+        title: 'Diagram reference',
+        points: 8,
+        ok: t => hasAny(t, ['d1', 'd2']) && hasAny(t, ['s1', 's2']) && hasAny(t, ['p1', 'p2']),
+        hint: 'Refer to D1 to D2, S1 to S2, and price rising from P1 to P2.'
+      },
+      {
+        title: 'Combined impact and quantity comment',
+        points: 6,
+        ok: t => hasAny(t, ['combined effect', 'combined impact', 'both demand and supply']) && hasAny(t, ['q1', 'q2', 'quantity rises', 'quantity falls', 'equilibrium quantity']),
+        hint: 'Explain the combined effect of demand rising and supply falling. Add a careful comment on equilibrium quantity.'
+      },
+      {
+        title: 'Conclusion',
+        points: 4,
+        ok: t => hasAny(t, ['therefore', 'in conclusion', 'to conclude']) && hasAny(t, ['rise sharply', 'increase sharply', 'sharp increase']),
+        hint: 'End by linking rising demand, falling supply, and inelastic DD/SS to sharply higher prices.'
+      }
+    ];
+
+    function hasAny(text, terms) {
+      return terms.some(term => text.includes(term));
+    }
+
+    function getWords(text) {
+      return text.trim() ? text.trim().split(/\s+/).length : 0;
+    }
+
+    function analyse() {
+      const raw = essay.value;
+      const text = raw.toLowerCase();
+      const words = getWords(raw);
+      let score = 0;
+      let html = '';
+
+      checks.forEach(check => {
+        const passed = check.ok(text);
+        if (passed) score += check.points;
+        const cls = passed ? 'ok' : words > 40 ? 'maybe' : 'missing';
+        const symbol = passed ? '✓' : words > 40 ? '!' : '×';
+        const status = passed ? 'Good' : words > 40 ? 'Needs checking' : 'Missing';
+        html += `
+          <div class="item ${cls}">
+            <div class="icon">${symbol}</div>
+            <div>
+              <div class="itemTitle">${check.title} — ${status}</div>
+              <div class="itemText">${passed ? 'This requirement seems to be present.' : check.hint}</div>
+            </div>
+          </div>`;
+      });
+
+      const penaltyNotes = [];
+      if (text.includes('evaluation') || text.includes('judgement')) penaltyNotes.push('Part (a) does not require evaluation. Focus on explanation and analysis.');
+      if (text.includes('price ceiling')) penaltyNotes.push('This part asks why prices rise. Do not spend time explaining price ceiling here.');
+      if (text.includes('subsidy') || text.includes('tax')) penaltyNotes.push('Policy discussion is not needed for this part (a) question.');
+      if (words > 0 && words < 250) penaltyNotes.push('Likely too short for a well-developed 10-mark explanation. Aim for fuller chains of reasoning.');
+
+      penaltyNotes.forEach(note => {
+        html += `<div class="item maybe"><div class="icon">!</div><div><div class="itemTitle">Possible issue</div><div class="itemText">${note}</div></div></div>`;
+      });
+
+      const level = score >= 76 ? 'L3' : score >= 45 ? 'L2' : 'L1';
+      scoreEl.textContent = score;
+      wordsEl.textContent = words;
+      levelEl.textContent = level;
+      meterEl.style.width = score + '%';
+      feedbackList.innerHTML = html;
+    }
+
+    function showTab(id) {
+      document.querySelectorAll('.tabBtn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tabPanel').forEach(panel => panel.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById(id).classList.add('active');
+    }
+
+    function insertStarter() {
+      essay.value = `Introduction\nWhen a market is in equilibrium, there is no tendency for price and quantity to change unless external forces act on the market. In the global rice market, global rice prices are expected to rise sharply due to changes in demand and supply, together with the price-inelastic nature of demand and supply for rice.\n\nDemand factor 1: rising world consumption\n\nDemand factor 2: greater use of rice for animal feeding\n\nSupply factor: falling crop yields due to bad weather\n\nPED analysis: why demand for rice is price inelastic\n\nPES analysis: why supply of rice is price inelastic\n\nCombined impact using diagram\n\nConclusion\n`;
+      analyse();
+      essay.focus();
+    }
+
+    async function copyEssay() {
+      try {
+        await navigator.clipboard.writeText(essay.value);
+        alert('Essay copied.');
+      } catch (e) {
+        alert('Copy failed. Please select the essay and copy manually.');
+      }
+    }
+
+    function clearEssay() {
+      if (confirm('Clear the essay?')) {
+        essay.value = '';
+        analyse();
+      }
+    }
+
+    essay.addEventListener('input', analyse);
+    analyse();
+  </script>
+</body>
+</html>
